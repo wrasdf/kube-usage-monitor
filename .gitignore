@@ -1,4 +1,3 @@
 */**/__pycache__/
 *.pyc
-all_nodes_usages.txt
-all_deployments_usages.txt
+cache
