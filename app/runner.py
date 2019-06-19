@@ -12,7 +12,7 @@ from parser import Parser
 @click.version_option('0.1')
 @click.option('-e', '--env', default='europa-stg', help='Support Clusters')
 @click.option('-c', '--updatea_cache', default=False, help='Generate Cluster Usage details to local.')
-@click.option('-n', '--node', default='', help='Sortby node <cpu_usage | memory_usage>')
+@click.option('-n', '--node', default='', help='Sortby node <cpu_usage | memory_usage | cpu_request | cpu_request | memory_request | memory_limit>')
 @click.option('-p', '--pod', default='', help='Sortby pod <cpu_request | cpu_limit | memory_request | memory_limit> ')
 @click.option('-t', '--top', default=20, help='Tops of usage list')
 
@@ -20,6 +20,7 @@ def main(**kwargs):
     """Kubernetes cluster usage monitor"""
 
     parser = Parser()
+
     argEnv = kwargs.get('env')
     argCache = kwargs.get('updatea_cache')
     argNode = kwargs.get('node')
@@ -27,11 +28,9 @@ def main(**kwargs):
     argTop = kwargs.get('top')
 
     if argCache == 'true':
-       print("Please wait for a while .... ")
        parser.update_cache(argEnv)
-       print("Data updated.")
 
-    supportNodesSortList = ['cpu_usage', 'memory_usage']
+    supportNodesSortList = ['cpu_usage', 'memory_usage', 'cpu_request', 'cpu_limit', 'memory_request', 'memory_limit']
     supportPodsSortList = ['cpu_request', 'cpu_limit', 'memory_request', 'memory_limit']
 
     if argNode != '' and argNode in supportNodesSortList:

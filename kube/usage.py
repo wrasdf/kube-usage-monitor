@@ -27,8 +27,13 @@ class UsageManager:
         bash = "kubectl top node | awk '{print $%s}'" % column_index
         return self.exec.exec_sh(bash, print_enable=False).split('\n')
 
+    def top_node_usage_bash(self, node, column_index):
+        bash = "kubectl describe node %s | grep Allocated -A 10 | grep -ve Event -ve Allocated -ve percent -ve -- | awk '{print $%s}'" % (node, column_index)
+        return self.exec.exec_sh(bash, print_enable=False).split('\n')
+
     def list_nodes_usage(self):
         # self.exec.exec_sh("kubectl top nodes")
+
         nodes = self.top_node_bash('1')
         nodes.remove(nodes[0])
 
@@ -44,12 +49,55 @@ class UsageManager:
         memUsages = self.top_node_bash('5')
         memUsages.remove(memUsages[0])
 
+        cpuRequestsPercentage = []
+        cpuRequestsData = []
+        cpuLimitsPercentage = []
+        cpuLimitsData = []
+
+        memoryRequestsPercentage = []
+        memoryRequestsData = []
+        memoryLimitsPercentage = []
+        memoryLimitsData = []
+
+        for node in nodes:
+            print("Processing node usage of {0}".format(node))
+
+            requestsData = self.top_node_usage_bash(node, '2')
+            requestsData.remove(requestsData[0])
+            requestsPercentage = self.top_node_usage_bash(node, '3')
+            requestsPercentage.remove(requestsPercentage[0])
+
+            limitsData = self.top_node_usage_bash(node, '4')
+            limitsPercentage = self.top_node_usage_bash(node, '5')
+
+            cpuRequestsData.append(requestsData[0])
+            memoryRequestsData.append(requestsData[1])
+
+            cpuRequestsPercentage.append(requestsPercentage[0])
+            memoryRequestsPercentage.append(requestsPercentage[1])
+
+            cpuLimitsData.append(limitsData[0])
+            memoryLimitsData.append(limitsData[1])
+
+            cpuLimitsPercentage.append(limitsPercentage[0])
+            memoryLimitsPercentage.append(limitsPercentage[1])
+
+            print("Done for node {0}".format(node))
+
         for i in range(len(nodes)):
             usage = {
                 'cpu_usage': self.p2f(cpuUsages[i]),
                 'cpu_usage_show': "{0} ({1})".format(cpuUsageData[i], cpuUsages[i]),
                 'memory_usage': self.p2f(memUsages[i]),
                 'memory_usage_show': "{0} ({1})".format(memUsageData[i], memUsages[i]),
+                'cpu_request': self.p2f(cpuRequestsPercentage[i]),
+                'cpu_request_show': "{0} {1}".format(cpuRequestsData[i], cpuRequestsPercentage[i]),
+                'cpu_limit': self.p2f(cpuLimitsPercentage[i]),
+                'cpu_limit_show': "{0} {1}".format(cpuLimitsData[i], cpuLimitsPercentage[i]),
+                'memory_request': self.p2f(memoryRequestsPercentage[i]),
+                'memory_request_show': "{0} {1}".format(memoryRequestsData[i], memoryRequestsPercentage[i]),
+                'memory_limit': self.p2f(memoryLimitsPercentage[i]),
+                'memory_limit_show': "{0} {1}".format(memoryLimitsData[i], memoryLimitsPercentage[i]),
                 'node': nodes[i]
             }
             self.nodes_usage.append(usage)
@@ -68,7 +116,7 @@ class UsageManager:
         return self.exec.exec_sh(bash, print_enable=False).split('\n')
 
     def get_deployment_usage(self, node=""):
-        print('Processing node {0}'.format(node))
+        print('Processing pod usage on node {0}'.format(node))
         # self.exec.exec_sh("kubectl describe node " + node + " | grep Namespace -A 20 | grep -ve Total -ve Allocated -ve Events -ve -- ")
 
         namespaces = self.node_describe_bash(node, '1')
