@@ -1,0 +1,7 @@
+boto3==1.9.167
+kubernetes==10.0.0a1
+unittest2==1.1.0
+pprint==0.1
+green==2.16.1
+requests===2.22.0
+click==7.0
