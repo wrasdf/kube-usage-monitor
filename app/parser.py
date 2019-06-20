@@ -52,9 +52,9 @@ class Parser:
         print("Top {0} node {1} usaged.".format(top, sort_key))
         orderData = sorted(data, key=lambda k: k[sort_key], reverse=True)[:top]
         table = PrettyTable()
-        table.field_names = ["Node", "CpuUsage", "MemUsage", "CpuRequest", "CpuLimit", "MemRequest", "MemLimit"]
+        table.field_names = ["Node", "CpuUsage", "MemUsage", "CpuRequest", "MemRequest" ,"CpuLimit", "MemLimit"]
         for item in orderData:
-            table.add_row([item['node'], item['cpu_usage_show'], item['memory_usage_show'], item['cpu_request_show'], item['cpu_limit_show'], item['memory_request_show'], item['memory_limit_show']])
+            table.add_row([item['node'], item['cpu_usage_show'], item['memory_usage_show'], item['cpu_request_show'], item['memory_request_show'], item['cpu_limit_show'], item['memory_limit_show']])
         print(table)
 
     # example:
@@ -75,7 +75,7 @@ class Parser:
         print("Top {0} pod resource of {1}.".format(top, sort_key))
         orderData = sorted(data, key=lambda k: k[sort_key], reverse=True)[:top]
         table = PrettyTable()
-        table.field_names = ["Node", "Namespace", "Pod", "CpuRequest", "CpuLimit", "MemRequest", "MemLimit"]
+        table.field_names = ["Node", "Namespace", "Pod", "CpuRequest", "MemRequest", "CpuLimit", "MemLimit"]
         for item in orderData:
-            table.add_row([item['node'], item['namespace'], item['pod'][:30], item['cpu_request_show'], item['cpu_limit_show'], item['memory_request_show'], item['memory_limit_show']])
+            table.add_row([item['node'], item['namespace'], item['pod'][:30], item['cpu_request_show'], item['memory_request_show'], item['cpu_limit_show'],  item['memory_limit_show']])
         print(table)
