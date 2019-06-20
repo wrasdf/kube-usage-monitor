@@ -49,7 +49,7 @@ class Parser:
             data = json.load(f)
 
         print("========================================================================")
-        print("Top {0} node {1} usaged.".format(top, sort_key))
+        print("Top {0} nodes for {1} usaged.".format(top, sort_key))
         orderData = sorted(data, key=lambda k: k[sort_key], reverse=True)[:top]
         table = PrettyTable()
         table.field_names = ["Node", "CpuUsage", "MemUsage", "CpuRequest", "MemRequest" ,"CpuLimit", "MemLimit"]
@@ -72,7 +72,7 @@ class Parser:
             data = json.load(f)
 
         print("========================================================================")
-        print("Top {0} pod resource of {1}.".format(top, sort_key))
+        print("Top {0} pods for {1} usage.".format(top, sort_key))
         orderData = sorted(data, key=lambda k: k[sort_key], reverse=True)[:top]
         table = PrettyTable()
         table.field_names = ["Node", "Namespace", "Pod", "CpuRequest", "MemRequest", "CpuLimit", "MemLimit"]

@@ -31,11 +31,10 @@ def main(**kwargs):
        parser.update_cache(argEnv)
 
     supportNodesSortList = ['cpu_usage', 'memory_usage', 'cpu_request', 'cpu_limit', 'memory_request', 'memory_limit']
-    supportPodsSortList = ['cpu_request', 'cpu_limit', 'memory_request', 'memory_limit']
-
     if argNode != '' and argNode in supportNodesSortList:
        parser.top_nodes_usages(env=argEnv, key=argNode, top=argTop)
 
+    supportPodsSortList = ['cpu_request', 'cpu_limit', 'memory_request', 'memory_limit']
     if argDeploy != '' and argDeploy in supportPodsSortList:
        parser.top_pods_usages(env=argEnv, key=argDeploy, top=argTop)
 
