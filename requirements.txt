@@ -1,4 +1,4 @@
-boto3==1.12.39
+boto3==1.16.26
 kubernetes==11.0.0
 unittest2==1.1.0
 pprint==0.1
