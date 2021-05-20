@@ -4,5 +4,5 @@ unittest2==1.1.0
 pprint==0.1
 green==3.1.4
 requests===2.23.0
-click==7.1.2
+click==8.0.1
 PTable==0.9.2
